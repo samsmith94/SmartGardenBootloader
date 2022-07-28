@@ -1,0 +1,12 @@
+../Core/Src/bootloader.c:6:6:FLASH_If_Init	8	static
+../Core/Src/bootloader.c:15:10:FLASH_If_Erase	56	static
+../Core/Src/bootloader.c:45:10:FLASH_If_FlashBegin	8	static
+../Core/Src/bootloader.c:53:10:FLASH_If_Write	24	static
+../Core/Src/bootloader.c:76:9:FLASH_If_FlashEnd	8	static
+../Core/Src/bootloader.c:85:10:FLASH_If_GetWriteProtectionStatus	40	static
+../Core/Src/bootloader.c:106:10:FLASH_If_WriteProtectionConfig	48	static
+../Core/Src/bootloader.c:137:17:GetSector	24	static
+../Core/Src/bootloader.c:179:6:Bootloader_JumpToApplication	24	static,ignoring_inline_asm
+../Core/Src/bootloader.c:199:9:Bootloader_VerifyChecksum	32	static
+../Core/Src/bootloader.c:226:10:readWord	24	static
+../Core/Src/bootloader.c:233:9:Bootloader_CheckForApplication	16	static
