@@ -141,7 +141,8 @@ int main(void)
 	f_close(&fil);
 #endif
 
-	printf("******** Welcome to bootloader. ********\r\n");
+	printf("\r\n************** BOOTLOADER **************\r\n");
+	printf("****************************************\r\n");
 	fresult = f_mount(&fs, "", 0);
 	if (fresult != FR_OK) {
 		printf("Error when mounting SD card.\r\n");
@@ -151,14 +152,6 @@ int main(void)
 	}
 	HAL_Delay(10);
 
-	fresult = f_open(&fil, "downloaded.bin",
-	FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
-	if (fresult != FR_OK) {
-		printf("Error when opening file.\r\n");
-		error = -2;
-	}
-	printf("f_open return: %d\r\n", fresult);
-	HAL_Delay(10);
 
 	printf("****************************************\r\n");
 	printf("Entering Bootloader (flashing GREEN LED)...\r\n");
@@ -193,11 +186,14 @@ int main(void)
 	}
 
 	//-- reset peripherals to guarantee flawless start of user application
-	// HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-	// HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	// HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	/*
+	HAL_GPIO_DeInit(GPIOC, &GPIO_InitStruct);
+	HAL_GPIO_DeInit(GPIOB, &GPIO_InitStruct);
+	HAL_GPIO_DeInit(GPIOD, &GPIO_InitStruct);
+*/
 
-	HAL_UART_DeInit(&huart2);
+
+	HAL_SPI_DeInit(&hspi1);
 	//	MX_FATFS_Init(); deinitje?
 	HAL_CRC_DeInit(&hcrc);
 
@@ -213,6 +209,7 @@ int main(void)
 	}
 	printf("\r\nWe should never get to here.\r\n");
 	printf("Some error must have happened.\r\n");
+	HAL_UART_DeInit(&huart2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -325,9 +322,20 @@ void Enter_Bootloader(void)
     if (fr != FR_OK)
     {
         // f_open failed
-        printf("File cannot be opened. FatFs error code: %u\r\n", fr);
+        //printf("File cannot be opened. FatFs error code: %u\r\n", fr);
+
+		printf("Error when opening file.\r\n");
+
+		printf("Maybe there is no file on SD card,\r\nas production.bin is flashed.\r\n");
+		error = -2;
+
+
         SD_Eject();
         printf("SD ejected.\r\n");
+
+
+        Bootloader_JumpToApplication();
+
         return;
     }
     printf("Software found on SD.\r\n");
